@@ -264,3 +264,12 @@ Machine-readable citation metadata is available in [`CITATION.cff`](CITATION.cff
 
 <p align="center"><strong>WasteAI v1.0.0 · Built by Atchyuteswar Gottumukkala</strong></p>
 <p align="center"><sub>Classify thoughtfully. Recycle responsibly. ♻️</sub></p>
+
+## Reproducibility
+
+WasteAI's training pipeline uses 224 × 224 RGB images, a seed of 42 and a 70% / 15% / 15% train-validation-test split. The committed Stage 2 split contains 1,768 training, 379 validation and 379 test images.
+
+Preprocessing is architecture-specific: the Custom CNN uses pixel values scaled to `[0, 1]`, while MobileNetV2, VGG16 and VGG19 apply their corresponding Keras `preprocess_input` functions after scaling the common pipeline tensor back to `[0, 255]`.
+
+See [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) for the detailed pipeline and evaluation notes. The developer's Windows / Python 3.11.9 dependency snapshot is in [`requirements-lock-windows-py311.txt`](requirements-lock-windows-py311.txt); it is not a universal Linux deployment lock.
+

@@ -271,8 +271,18 @@ def get_model_input_size(model: Any) -> tuple[int, int]:
 def preprocess_for_model(image: Image.Image, model_name: str, model: Any) -> np.ndarray:
     """Preprocess one RGB image using the training pipeline's normalization mode."""
     height, width = get_model_input_size(model)
-    image = ImageOps.exif_transpose(image).convert("RGB").resize((width, height))
+
+    # Keep the image's intended orientation, then convert to RGB.
+    image = ImageOps.exif_transpose(image).convert("RGB")
     pixels = np.asarray(image, dtype=np.float32)
+
+    # Match the training notebook's TensorFlow bilinear resizing.
+    pixels = tf.image.resize(
+        pixels,
+        (height, width),
+        method=tf.image.ResizeMethod.BILINEAR,
+        antialias=False,
+    ).numpy()
 
     mode = MODEL_CONFIG[model_name]["preprocessing"]
 

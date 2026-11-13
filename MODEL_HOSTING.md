@@ -89,3 +89,18 @@ The application currently assumes:
 - VGG19: Keras VGG19 `preprocess_input` on RGB pixels in `[0, 255]`.
 
 These settings reflect the Colab pipeline described in the project work. Confirm them against the notebook before treating deployed predictions as validated.
+
+### Training-pipeline clarification
+
+The common training pipeline resizes RGB images to 224 × 224
+and normalizes pixels to [0, 1].
+
+Architecture-specific preprocessing follows:
+
+- Custom CNN: uses [0, 1] pixel values directly.
+- MobileNetV2: multiplies by 255 and applies its Keras preprocessing.
+- VGG16: multiplies by 255 and applies its Keras preprocessing.
+- VGG19: multiplies by 255 and applies its Keras preprocessing.
+
+The inference implementation in app.py follows these
+architecture-specific transformations.
