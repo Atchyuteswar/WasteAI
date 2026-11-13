@@ -1,5 +1,9 @@
 # ♻️ WasteAI — Deep Learning-Based Waste Classification
 
+[![Open Live Demo](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://wasteai-atchyuteswar.streamlit.app/)
+
+**Live demo:** https://wasteai-atchyuteswar.streamlit.app/
+
 WasteAI is an academic research prototype that classifies waste images into six categories using deep learning. It compares a custom CNN with MobileNetV2, VGG16 and VGG19, and provides a Streamlit interface for image classification and experiment analysis.
 
 > **Deployment status:** Source code and experiment artifacts are in this repository. To make the public demo fully functional, publish the four model weights on Hugging Face and configure the Streamlit app as described below.

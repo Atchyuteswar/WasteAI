@@ -30,6 +30,7 @@ import time
 from pathlib import Path
 from typing import Any
 
+import altair as alt
 import numpy as np
 import pandas as pd
 import streamlit as st
@@ -316,6 +317,24 @@ st.markdown(
         border: 1px solid var(--line);
         border-radius: 12px;
         overflow: hidden;
+    }
+
+    /* Clearer form labels and upload area across browser themes. */
+    [data-testid="stFileUploader"] label,
+    [data-testid="stSelectbox"] label,
+    [data-testid="stTextInput"] label {
+        color: var(--ink) !important;
+        font-weight: 700 !important;
+    }
+
+    [data-testid="stFileUploaderDropzone"] {
+        background: #ffffff !important;
+        border: 1px dashed #a9c5b1 !important;
+        border-radius: 12px !important;
+    }
+
+    [data-testid="stFileUploaderDropzone"] * {
+        color: var(--ink);
     }
 
     .footer {
@@ -745,14 +764,35 @@ elif page == "Waste Classifier":
             score_table = pd.DataFrame(
                 {
                     "Material": [CLASSES[index].title() for index in ranking],
-                    "Score (%)": [float(scores[index]) * 100 for index in ranking],
+                    "Score": [float(scores[index]) * 100 for index in ranking],
                 }
             )
 
-            st.bar_chart(score_table.set_index("Material"), horizontal=True)
+            # Keep the axis fixed at 0–100%, rather than auto-scaling above 100.
+            score_chart = alt.Chart(score_table).mark_bar(
+                color="#23784d", cornerRadiusEnd=5, height=22
+            ).encode(
+                x=alt.X(
+                    "Score:Q",
+                    scale=alt.Scale(domain=[0, 100], clamp=True),
+                    axis=alt.Axis(
+                        title="Model output score (%)",
+                        values=[0, 20, 40, 60, 80, 100],
+                        labelExpr="datum.value + '%'",
+                    ),
+                ),
+                y=alt.Y("Material:N", sort="-x", axis=alt.Axis(title=None)),
+                tooltip=[
+                    alt.Tooltip("Material:N", title="Class"),
+                    alt.Tooltip("Score:Q", title="Score", format=".2f"),
+                ],
+            ).properties(height=250)
+
+            st.altair_chart(score_chart, use_container_width=True, theme=None)
 
             with st.expander("View detailed prediction scores"):
-                st.dataframe(score_table, use_container_width=True, hide_index=True)
+                display_scores = score_table.rename(columns={"Score": "Score (%)"})
+                st.dataframe(display_scores, use_container_width=True, hide_index=True)
 
             st.caption(
                 "The displayed score is the model's output score. It is not necessarily "
@@ -807,7 +847,24 @@ elif page == "Model Performance":
                 chart_df = chart_df * 100
 
             st.markdown("### Evaluation metrics (%)")
-            st.bar_chart(chart_df)
+            long_metrics = chart_df.reset_index().melt(
+                id_vars="Model", var_name="Metric", value_name="Score"
+            )
+            metric_chart = alt.Chart(long_metrics).mark_bar(
+                cornerRadiusEnd=4,
+            ).encode(
+                x=alt.X(
+                    "Score:Q",
+                    scale=alt.Scale(domain=[0, 100], clamp=True),
+                    axis=alt.Axis(title="Score (%)", values=[0, 20, 40, 60, 80, 100]),
+                ),
+                y=alt.Y("Model:N", sort="-x", axis=alt.Axis(title=None)),
+                color=alt.Color("Metric:N", scale=alt.Scale(scheme="tableau10")),
+                yOffset="Metric:N",
+                tooltip=["Model", "Metric", alt.Tooltip("Score:Q", format=".2f")],
+            ).properties(height=260)
+
+            st.altair_chart(metric_chart, use_container_width=True, theme=None)
 
         if "Accuracy" in comparison_df.columns and "Model" in comparison_df.columns:
             accuracy_values = pd.to_numeric(
@@ -977,6 +1034,13 @@ elif page == "Project Details":
 
     st.markdown("### Classification categories")
     st.write(" · ".join(name.title() for name in CLASSES))
+
+    st.markdown("### Project links")
+    link_col1, link_col2 = st.columns(2)
+    with link_col1:
+        st.link_button("GitHub source code", "https://github.com/Atchyuteswar/WasteAI")
+    with link_col2:
+        st.link_button("Hugging Face model weights", "https://huggingface.co/Atchyuteswar/wasteai-models")
 
     st.warning(
         "This model predicts the six dataset categories. It does not identify exact "
