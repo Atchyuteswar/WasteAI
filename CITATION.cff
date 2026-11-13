@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this project, please cite it using the metadata below."
+title: "WasteAI: Deep Learning-Based Waste Classification"
+authors:
+  - family-names: "Gottumukkala"
+    given-names: "Atchyuteswar"
+    affiliation: "Student project"
+type: software
+repository-code: "https://github.com/Atchyuteswar/WasteAI"
+url: "https://wasteai-atchyuteswar.streamlit.app/"
+abstract: >-
+  WasteAI is an academic research prototype for six-class waste image
+  classification. It compares a custom CNN, MobileNetV2, VGG16 and VGG19,
+  and provides a Streamlit interface for image inference and model evaluation.
