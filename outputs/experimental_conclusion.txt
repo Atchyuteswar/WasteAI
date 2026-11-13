@@ -1,0 +1,23 @@
+
+WASTE CLASSIFICATION - EXPERIMENTAL CONCLUSION
+
+Four deep learning architectures were implemented and evaluated:
+1. Custom CNN
+2. MobileNetV2
+3. VGG16
+4. VGG19
+
+All models were evaluated using the same test dataset.
+
+The best performing model was VGG19.
+
+Test Accuracy: 91.29%
+Macro Precision: 90.43%
+Macro Recall: 89.76%
+Macro F1 Score: 89.93%
+
+The experiments demonstrate the effectiveness of transfer learning
+for waste image classification.
+
+The final model selection considers classification performance,
+model size and computational requirements.

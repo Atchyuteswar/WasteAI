@@ -1,0 +1,8 @@
+{
+    "model": "Custom CNN",
+    "accuracy": 0.7308707124010554,
+    "precision_macro": 0.7026558725250229,
+    "recall_macro": 0.7211976006408441,
+    "f1_macro": 0.6961801384718052,
+    "epochs_trained": 30
+}

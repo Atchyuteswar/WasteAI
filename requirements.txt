@@ -1,0 +1,10 @@
+streamlit
+tensorflow==2.21.0
+keras==3.13.2
+huggingface_hub
+numpy
+pandas
+pillow
+matplotlib
+seaborn
+scikit-learn

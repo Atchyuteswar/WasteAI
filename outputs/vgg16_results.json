@@ -1,0 +1,12 @@
+{
+    "model": "VGG16",
+    "accuracy": 0.8865435356200527,
+    "precision_macro": 0.8758108479939466,
+    "recall_macro": 0.8814209830259117,
+    "f1_macro": 0.8769387559937011,
+    "head_epochs": 15,
+    "fine_tune_epochs": 10,
+    "head_training_time_seconds": 648.4801561832428,
+    "fine_tune_time_seconds": 438.78087544441223,
+    "total_training_time_seconds": 1087.261031627655
+}

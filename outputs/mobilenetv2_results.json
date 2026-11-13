@@ -1,0 +1,12 @@
+{
+    "model": "MobileNetV2",
+    "accuracy": 0.8707124010554089,
+    "precision_macro": 0.8729447804238933,
+    "recall_macro": 0.8566954560733099,
+    "f1_macro": 0.8600547111319384,
+    "head_epochs": 15,
+    "fine_tune_epochs": 7,
+    "head_training_time_seconds": 542.5986161231995,
+    "fine_tune_time_seconds": 235.7672300338745,
+    "total_training_time_seconds": 778.365846157074
+}

@@ -1,0 +1,36 @@
+﻿# Python
+__pycache__/
+*.py[cod]
+*.log
+
+# Virtual environments
+.venv/
+.venv311/
+venv/
+
+# Dataset
+dataset/
+data/
+
+# Trained model weights (host separately)
+models/
+*.keras
+*.h5
+*.weights.h5
+
+# Secrets
+.env
+.streamlit/secrets.toml
+
+# Jupyter temporary files
+.ipynb_checkpoints/
+
+# Archives
+*.zip
+
+# Operating system
+.DS_Store
+Thumbs.db
+
+# Unneeded source document
+Sunitha maam project document.pdf
