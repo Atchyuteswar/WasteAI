@@ -12,14 +12,14 @@
   <img src="https://img.shields.io/badge/Python-3.11-3776AB?style=flat-square&logo=python&logoColor=white" alt="Python 3.11" />
   <img src="https://img.shields.io/badge/TensorFlow-2.21.0-FF6F00?style=flat-square&logo=tensorflow&logoColor=white" alt="TensorFlow 2.21.0" />
   <img src="https://img.shields.io/badge/Keras-3.13.2-D00000?style=flat-square&logo=keras&logoColor=white" alt="Keras 3.13.2" />
-  <img src="https://img.shields.io/badge/Streamlit-App-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit" />
+  <img src="https://img.shields.io/badge/Streamlit-1.67-FF4B4B?style=flat-square&logo=streamlit&logoColor=white" alt="Streamlit 1.67" />
   <img src="https://img.shields.io/badge/License-Not%20specified-lightgrey?style=flat-square" alt="License not specified" />
 </p>
 
 <h1 align="center">WasteAI</h1>
 <p align="center"><strong>Deep learning for image-based waste classification</strong></p>
 <p align="center">
-  WasteAI classifies waste images into six dataset categories using four deep-learning models and provides an interactive Streamlit application for inference and model evaluation.
+  WasteAI classifies waste images into six dataset categories using four deep-learning models and provides a responsive Streamlit application for real-time inference, benchmarking, and training diagnostics.
 </p>
 
 <p align="center">
@@ -38,7 +38,7 @@
 
 ## Overview
 
-WasteAI is an academic research prototype for image-based waste classification. It compares a custom convolutional neural network with three transfer-learning architectures and brings model inference, evaluation metrics and training analytics together in a Streamlit interface.
+WasteAI is an academic research prototype for image-based waste classification. It compares a custom convolutional neural network trained from scratch against three ImageNet transfer-learning architectures (**MobileNetV2**, **VGG16**, and **VGG19**) and brings model inference, evaluation metrics, and training analytics together in a responsive Streamlit workspace.
 
 ### Supported waste categories
 
@@ -46,23 +46,21 @@ WasteAI is an academic research prototype for image-based waste classification. 
   <img src="outputs/class_distribution.png" alt="Distribution of images across the six WasteAI classes" width="82%" />
 </p>
 
-The classifier uses the following six labels: **Cardboard · Glass · Metal · Paper · Plastic · Trash**. Class-index order is defined in [`outputs/class_mapping.json`](outputs/class_mapping.json).
+The classifier uses six dataset labels: **Cardboard · Glass · Metal · Paper · Plastic · Trash**. Class-index order is defined in [`outputs/class_mapping.json`](outputs/class_mapping.json).
 
 ## Application
 
 Try the live application: **[wasteai-atchyuteswar.streamlit.app](https://wasteai-atchyuteswar.streamlit.app/)**.
 
-The app includes five areas:
+The interface is built with native Streamlit components and a dual light/dark theme ([`.streamlit/config.toml`](.streamlit/config.toml)) that adapts across desktop, tablet, and mobile viewports:
 
-| Area | What it contains |
+| Workspace view | What it contains |
 |---|---|
-| Overview | Project summary and navigation |
-| Waste Classifier | Image upload, model selection and prediction scores |
-| Model Performance | Side-by-side model metrics |
-| Training Analytics | Training curves and confusion matrices |
-| Project Details | Architecture, experiment and project information |
-
-> **Preview note:** This README currently uses authentic experiment plots from the repository. The live application link above opens the current interactive UI; actual in-app screenshots can be added to `assets/screenshots/` after capturing them from the deployed app.
+| **Overview** | KPI summary cards, supported material categories, and quick-action navigation |
+| **Waste Classifier** | Image upload, architecture selection, top-class and runner-up metrics, disposal guidance, and Altair score distribution chart |
+| **Model Performance** | Held-out test benchmark table with visual progress columns and multi-metric comparison chart |
+| **Training Analytics** | Cross-model comparison plots, interactive per-epoch accuracy/loss curves, exported plots, and confusion matrices with classification reports |
+| **Project Details** | Dataset links, architecture specifications, scope disclosures, and runtime environment diagnostics |
 
 ## Model performance
 
@@ -101,7 +99,7 @@ All figures and tabular experiment outputs are stored in [`outputs/`](outputs/).
 
 ```mermaid
 flowchart LR
-    A[Input waste image] --> B[Resize and preprocess]
+    A[Input waste image] --> B[EXIF orient & TF bilinear resize 224x224]
     B --> C{Select model}
     C --> D[Custom CNN]
     C --> E[MobileNetV2]
@@ -111,21 +109,21 @@ flowchart LR
     E --> H
     F --> H
     G --> H
-    H --> I[Predicted dataset category]
+    H --> I[Predicted dataset category & guidance]
 ```
 
 ## Models
 
-| Model | Role in the experiment | Hosted filename |
-|---|---|---|
-| Custom CNN | Baseline model trained from scratch | `cnn_model.keras` |
-| MobileNetV2 | Lightweight transfer-learning model | `mobilenetv2_model.keras` |
-| VGG16 | Transfer-learning comparison model | `vgg16_model.keras` |
-| VGG19 | Highest recorded test accuracy in this experiment | `vgg19_model.keras` |
+| Model | Role in the experiment | Input normalization | Hosted filename |
+|---|---|---|---|
+| **VGG19** | Highest recorded test accuracy (91.29%) | `tf.keras.applications.vgg19.preprocess_input` | `vgg19_model.keras` |
+| **VGG16** | Deep transfer-learning comparison model | `tf.keras.applications.vgg16.preprocess_input` | `vgg16_model.keras` |
+| **MobileNetV2** | Lightweight transfer-learning model (22.6 MB) | `tf.keras.applications.mobilenet_v2.preprocess_input` | `mobilenetv2_model.keras` |
+| **Custom CNN** | Baseline model trained from scratch (4.9 MB) | Pixel values scaled to `[0, 1]` | `cnn_model.keras` |
 
-The four inference models are hosted in the public [Hugging Face model repository](https://huggingface.co/Atchyuteswar/wasteai-models), rather than committed to Git. See [`MODEL_HOSTING.md`](MODEL_HOSTING.md) for details.
+The four inference models are hosted in the public [Hugging Face model repository](https://huggingface.co/Atchyuteswar/wasteai-models) rather than committed to Git. See [`MODEL_HOSTING.md`](MODEL_HOSTING.md) for details.
 
-## Dataset and experiment setup
+## Dataset and reproducibility
 
 WasteAI uses the [Garbage Classification dataset on Kaggle](https://www.kaggle.com/datasets/asdasdasasdas/garbage-classification). The original image dataset is not included in this Git repository.
 
@@ -136,9 +134,9 @@ WasteAI uses the [Garbage Classification dataset on Kaggle](https://www.kaggle.c
 | Testing | 379 | 15% |
 | **Total** | **2,526** | **100%** |
 
-Experiment configuration: 224 × 224 input images, random seed 42, six classes, and a 70/15/15 train-validation-test split. The saved configuration is in [`outputs/stage2_config.json`](outputs/stage2_config.json); the portable split metadata is in [`outputs/splits/`](outputs/splits/).
-
-The initial Stage 1 manifest counted 2,527 valid images; one image was unavailable during Stage 2 manifest validation. The reported model comparisons use the saved Stage 2 split of 2,526 images.
+- **Experiment configuration:** 224 × 224 RGB input images, random seed `42`, six classes, and a 70% / 15% / 15% train-validation-test split. Saved configuration metadata is in [`outputs/stage2_config.json`](outputs/stage2_config.json) and portable split CSVs are in [`outputs/splits/`](outputs/splits/).
+- **Training/inference parity:** In `app.py`, uploaded images undergo EXIF orientation normalization followed by `tf.image.resize(..., method=ResizeMethod.BILINEAR, antialias=False)` and architecture-specific preprocessing to match the Google Colab training pipeline.
+- See [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) for detailed pipeline and evaluation notes.
 
 ## Quick start
 
@@ -173,9 +171,9 @@ pip install -r requirements.txt
 
 ### 3. Configure model access
 
-For local development, place the four `.keras` files in a local `models/` directory. This directory is intentionally excluded from Git.
+For local development, place the four `.keras` files in a local `models/` directory (excluded from Git).
 
-Alternatively, use the public Hugging Face repository. Set the repository ID before launching:
+Alternatively, download models on demand from the public Hugging Face repository by setting `HF_MODEL_REPO`:
 
 **Windows PowerShell**
 
@@ -219,31 +217,40 @@ WasteAI/
 ├── .github/
 │   └── workflows/
 │       └── keep-streamlit-alive.yml
+├── assets/
+│   └── wasteai-banner.png
 ├── docs/
 │   ├── LICENSING_REVIEW.md
 │   └── REPRODUCIBILITY.md
 └── outputs/
     ├── class_mapping.json
-    ├── final_model_comparison.csv
+    ├── class_weights.json
+    ├── stage2_config.json
     ├── dataset_manifest.csv
+    ├── final_model_comparison.csv
+    ├── training_time_comparison.csv
+    ├── experimental_conclusion.txt
     ├── splits/
-    └── evaluation plots and reports
+    │   ├── train.csv
+    │   ├── validation.csv
+    │   └── test.csv
+    └── model curves, confusion matrices, and reports
 ```
 
-Large model weights and the original dataset are hosted/stored separately and are not tracked in Git.
+Large model weights (`models/`) and the raw image dataset (`dataset/`) are stored separately and excluded from Git. A scheduled GitHub Actions workflow ([`.github/workflows/keep-streamlit-alive.yml`](.github/workflows/keep-streamlit-alive.yml)) periodically pings the deployed Streamlit Community Cloud app to prevent inactivity sleep.
 
 ## Responsible use and limitations
 
-- WasteAI is an **educational research prototype**, not a certified waste-sorting, recycling or municipal decision system.
-- The model predicts one of six dataset labels. It does not identify exact material composition, plastic resin codes, contamination levels or local recyclability.
-- Disposal guidance is general; follow the rules of local recycling services.
+- WasteAI is an **educational research prototype**, not a certified waste-sorting, recycling, or municipal decision system.
+- The model predicts one of six dataset labels. It does not identify exact material composition, plastic resin codes, contamination levels, or local recyclability.
+- Disposal guidance is general; always follow the rules of local recycling services.
 - Softmax outputs are model scores and are not necessarily calibrated probabilities of correctness.
-- Held-out test performance may not generalize to new cameras, lighting, backgrounds, objects or waste streams.
+- Held-out test performance may not generalize to new cameras, lighting, backgrounds, objects, or waste streams.
 - Avoid uploading sensitive or private images to the public demo.
 
 ## License and third-party materials
 
-No project-wide open-source license has been declared. Public availability of this repository does not by itself grant permission to reuse, modify or redistribute its contents. The Kaggle dataset, pretrained weights and dependencies may have their own terms; review them before redistribution. See [`docs/LICENSING_REVIEW.md`](docs/LICENSING_REVIEW.md).
+No project-wide open-source license has been declared. Public availability of this repository does not by itself grant permission to reuse, modify, or redistribute its contents. The Kaggle dataset, pretrained weights, and dependencies may have their own terms; review them before redistribution. See [`docs/LICENSING_REVIEW.md`](docs/LICENSING_REVIEW.md).
 
 ## Citation
 
@@ -267,12 +274,3 @@ Machine-readable citation metadata is available in [`CITATION.cff`](CITATION.cff
 
 <p align="center"><strong>WasteAI v1.0.0 · Built by Atchyuteswar Gottumukkala</strong></p>
 <p align="center"><sub>Classify thoughtfully. Recycle responsibly. ♻️</sub></p>
-
-## Reproducibility
-
-WasteAI's training pipeline uses 224 × 224 RGB images, a seed of 42 and a 70% / 15% / 15% train-validation-test split. The committed Stage 2 split contains 1,768 training, 379 validation and 379 test images.
-
-Preprocessing is architecture-specific: the Custom CNN uses pixel values scaled to `[0, 1]`, while MobileNetV2, VGG16 and VGG19 apply their corresponding Keras `preprocess_input` functions after scaling the common pipeline tensor back to `[0, 255]`.
-
-See [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) for the detailed pipeline and evaluation notes.
-
