@@ -1,4 +1,4 @@
-﻿# Python
+# Python
 __pycache__/
 *.py[cod]
 *.log
@@ -32,6 +32,6 @@ models/
 .DS_Store
 Thumbs.db
 
-# Unneeded source document
-Sunitha maam project document.pdf
-.agents/skills/developing-with-streamlit
+# Local documents and agent skills
+*.pdf
+.agents/

@@ -64,7 +64,7 @@ For closer training/inference parity, use TensorFlow bilinear resizing in `app.p
 
 ## 5. Recorded local environment
 
-The accompanying `requirements-lock-windows-py311.txt` was copied from the project's local `python -m pip freeze` output.
+The local development environment used the following package versions:
 
 | Component | Recorded version |
 |---|---|
@@ -79,14 +79,7 @@ The accompanying `requirements-lock-windows-py311.txt` was copied from the proje
 | Pillow | 13.0.0 |
 | scikit-learn | 1.9.1 |
 
-The lock file is an environment snapshot from the developer's Windows / Python 3.11.9 environment. It is not a guaranteed cross-platform lock and should not automatically replace the Streamlit Cloud `requirements.txt`. Cloud deployment should be tested on its own Linux runtime.
-
-To record the active environment again:
-
-```powershell
-python --version
-python -m pip freeze > requirements-lock-windows-py311.txt
-```
+These versions reflect the developer's Windows / Python 3.11.9 environment; cloud deployment uses `requirements.txt` on its Linux runtime.
 
 ## 6. Evaluation protocol
 

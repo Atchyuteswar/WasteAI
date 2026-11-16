@@ -214,11 +214,14 @@ WasteAI/
 ├── Waste_Classification_Stage_1.ipynb
 ├── MODEL_HOSTING.md
 ├── CITATION.cff
-├── PUBLIC_QA_CHECKLIST.md
+├── .streamlit/
+│   └── config.toml
+├── .github/
+│   └── workflows/
+│       └── keep-streamlit-alive.yml
 ├── docs/
-│   └── LICENSING_REVIEW.md
-├── scripts/
-│   └── normalize_dataset_paths.py
+│   ├── LICENSING_REVIEW.md
+│   └── REPRODUCIBILITY.md
 └── outputs/
     ├── class_mapping.json
     ├── final_model_comparison.csv
@@ -227,7 +230,7 @@ WasteAI/
     └── evaluation plots and reports
 ```
 
-Large model weights and the original dataset are hosted/stored separately and are not tracked in Git. The path-normalization utility converts Colab-specific absolute paths in experiment CSVs into project-relative `dataset/...` paths.
+Large model weights and the original dataset are hosted/stored separately and are not tracked in Git.
 
 ## Responsible use and limitations
 
@@ -271,5 +274,5 @@ WasteAI's training pipeline uses 224 × 224 RGB images, a seed of 42 and a 70% /
 
 Preprocessing is architecture-specific: the Custom CNN uses pixel values scaled to `[0, 1]`, while MobileNetV2, VGG16 and VGG19 apply their corresponding Keras `preprocess_input` functions after scaling the common pipeline tensor back to `[0, 255]`.
 
-See [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) for the detailed pipeline and evaluation notes. The developer's Windows / Python 3.11.9 dependency snapshot is in [`requirements-lock-windows-py311.txt`](requirements-lock-windows-py311.txt); it is not a universal Linux deployment lock.
+See [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) for the detailed pipeline and evaluation notes.
 
