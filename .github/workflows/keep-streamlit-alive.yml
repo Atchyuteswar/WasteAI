@@ -1,0 +1,27 @@
+name: Keep Streamlit App Alive
+
+on:
+  schedule:
+    # Run every 6 hours (including 06:00 UTC) to prevent Streamlit Community Cloud sleep mode
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-app:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send keep-alive request to WasteAI Streamlit app
+        run: |
+          APP_URL="https://wasteai-atchyuteswar.streamlit.app"
+          echo "Pinging ${APP_URL}..."
+          HTTP_STATUS=$(curl -s -L -A "Mozilla/5.0 (compatible; WasteAI-KeepAlive/1.0)" -o /dev/null -w "%{http_code}" "${APP_URL}/")
+          echo "Main page HTTP status: ${HTTP_STATUS}"
+
+          HEALTH_STATUS=$(curl -s -L -A "Mozilla/5.0 (compatible; WasteAI-KeepAlive/1.0)" -o /dev/null -w "%{http_code}" "${APP_URL}/_stcore/health")
+          echo "Health endpoint HTTP status: ${HEALTH_STATUS}"
+
+          if [ "${HTTP_STATUS}" -ge 400 ] && [ "${HEALTH_STATUS}" -ge 400 ]; then
+            echo "Warning: App returned error status codes (${HTTP_STATUS}, ${HEALTH_STATUS})."
+            exit 1
+          fi
+
